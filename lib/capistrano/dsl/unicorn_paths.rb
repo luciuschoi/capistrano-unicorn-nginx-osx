@@ -3,7 +3,7 @@ module Capistrano
     module UnicornPaths
 
       def unicorn_initd_file
-        "/usr/local/etc/init.d/unicorn_#{fetch(:application)}_#{fetch(:stage)}"
+        # "/usr/local/etc/init.d/#{fetch(:unicorn_service)}"
       end
 
       def unicorn_default_config_file
@@ -27,7 +27,7 @@ module Capistrano
       end
 
       def unicorn_default_logrotate_config_file
-        "/usr/local/etc/logrotate.d/unicorn_#{fetch(:application)}_#{fetch(:stage)}"
+        "/usr/local/etc/logrotate.d/#{fetch(:unicorn_service)}"
       end
     end
   end
