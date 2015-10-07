@@ -3,6 +3,7 @@ module Capistrano
     module UnicornPaths
 
       def unicorn_initd_file
+        "/usr/local/etc/init.d/unicorn_mediforum_production}"
         # "/usr/local/etc/init.d/#{fetch(:unicorn_service)}"
       end
 
