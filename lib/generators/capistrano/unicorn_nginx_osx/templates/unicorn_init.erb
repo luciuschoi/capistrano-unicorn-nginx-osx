@@ -10,7 +10,8 @@ set -e
 TIMEOUT=${TIMEOUT-60}
 APP_ROOT="/Users/<%= fetch(:unicorn_user) %>/apps/$1"
 PID=<%= fetch(:unicorn_pid) %>
-PLIST="/Users/<%= fetch(:unicorn_user) %>/Library/LaunchAgents/apps.$1.unicorn.plist"
+PLIST="/Users/<%= fetch(:unicorn_user) %>/apps/<%= fetch(:application) %>/shared/config/apps.$1.unicorn.plist"
+<!-- PLIST="/Users/<%= fetch(:unicorn_user) %>/Library/LaunchAgents/apps.$1.unicorn.plist" -->
 LABEL="apps.$1.unicorn"
 AS_USER=<%= fetch(:unicorn_user) %>
 

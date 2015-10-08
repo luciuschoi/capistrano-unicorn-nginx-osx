@@ -11,7 +11,7 @@ module Capistrano
       end
 
       def unicorn_default_config_plist
-        shared_path.join('config/unicorn.plist')
+        shared_path.join("config/apps.#{fetch(:application)}_#{fetch(:staging)}.unicorn.plist")
       end
 
       def unicorn_default_pid_file
