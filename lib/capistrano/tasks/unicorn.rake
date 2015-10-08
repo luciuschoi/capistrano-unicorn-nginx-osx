@@ -42,8 +42,6 @@ namespace :unicorn do
     end
   end
 
-  after "deploy:setup", "unicorn:setup_initializer"
-
   %w[start stop restart upgrade].each do |command|
     desc "#{command} unicorn"
     task command, roles: :app do
@@ -76,6 +74,7 @@ end
 
 namespace :deploy do
   after :publishing, 'unicorn:restart'
+  after :setup, "unicorn:setup_initializer"
 end
 
 desc 'Server setup tasks'
