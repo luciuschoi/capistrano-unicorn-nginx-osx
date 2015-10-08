@@ -7,7 +7,7 @@ module Capistrano
       end
 
       def nginx_service_path
-        '/usr/local/etc/nginx'
+        '/usr/local/bin/nginx'
       end
 
       def nginx_default_pid_file
