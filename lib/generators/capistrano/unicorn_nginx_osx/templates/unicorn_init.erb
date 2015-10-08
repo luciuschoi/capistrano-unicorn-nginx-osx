@@ -1,23 +1,18 @@
-#!/bin/bash
-### BEGIN INIT INFO
-# Provides: unicorn
-# Required-Start: $remote_fs $syslog
-# Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: Manage unicorn server
-# Description: Start, stop, restart unicorn server for a specific application.
-### END INIT INFO
+#!/bin/sh
+
+# Modified version of githubs unicorn_init.sh script to control multiple unicorn processes.
+# PLIST added for launchctl (and LABEL if you want to use the lunchy gem)
+# usage: unicorn_control.sh <application> command
+
 set -e
 
 # Feel free to change any of the following variables for your app:
 TIMEOUT=${TIMEOUT-60}
-APP_ROOT=<%= current_path %>
+APP_ROOT="/Users/<%= fetch(:unicorn_user) %>/apps/$1"
 PID=<%= fetch(:unicorn_pid) %>
-
+PLIST="/Users/<%= fetch(:unicorn_user) %>/Library/LaunchAgents/apps.$1.unicorn.plist"
+LABEL="apps.$1.unicorn"
 AS_USER=<%= fetch(:unicorn_user) %>
-UNICORN_ENV="<%= fetch(:unicorn_env) %>"
-CMD="export HOME; true "${HOME:=$(getent passwd "$AS_USER" | cut -d: -f6;)}" ; cd $APP_ROOT && $UNICORN_ENV <%= bundle_unicorn("-D -c", fetch(:unicorn_config), "-E", fetch(:unicorn_app_env)) %>"
 
 set -u
 
@@ -33,29 +28,43 @@ oldsig () {
 
 run () {
   if [ "$(id -un)" = "$AS_USER" ]; then
-    eval $1
+   eval $1
   else
-    su -c "$1" - $AS_USER
+    su $AS_USER -c "$1"
   fi
+
 }
 
-case "$1" in
+case "$2" in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  run "$CMD"
+  launchctl load $PLIST
   ;;
 stop)
-  sig QUIT && exit 0
+  run "launchctl unload $PLIST" && exit 0
   echo >&2 "Not running"
   ;;
 force-stop)
-  sig TERM && exit 0
+  run "launchctl unload $PLIST" && exit 0
   echo >&2 "Not running"
   ;;
 restart|reload)
-  sig USR2 && echo reloaded OK && exit 0
-  echo >&2 "Couldn't reload, starting '$CMD' instead"
-  run "$CMD"
+  sig HUP && echo reloaded OK && exit 0
+  echo >&2 "Couldn't reload, starting '$PLIST' instead"
+  run "launchctl load $PLIST"
+  ;;
+dump)
+  echo $APP_ROOT
+  echo $PID
+  echo `cat $PID`
+  echo $PLIST
+  echo $LABEL
+  echo $TIMEOUT
+  echo $AS_USER
+  echo $OLD_PIN
+  echo `cat $OLD_PIN`
+  echo "Control Command: $1 $2"
+  exit 0
   ;;
 upgrade)
   if sig USR2 && sleep 2 && sig 0 && oldsig QUIT
@@ -74,8 +83,8 @@ upgrade)
     fi
     exit 0
   fi
-  echo >&2 "Couldn't upgrade, starting '$CMD' instead"
-  run "$CMD"
+  echo >&2 "Couldn't upgrade, starting '$PLIST' instead"
+  run "launchctl load $PLIST"
   ;;
 reopen-logs)
   sig USR1
@@ -85,4 +94,3 @@ reopen-logs)
   exit 1
   ;;
 esac
-

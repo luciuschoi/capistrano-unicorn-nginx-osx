@@ -18,10 +18,9 @@ namespace :load do
     set :unicorn_use_tcp, -> { roles(:app, :web).count > 1 } # use tcp if web and app nodes are on different servers
     set :unicorn_app_env, -> { fetch(:rails_env) || fetch(:stage) }
     # set :unicorn_user # default set in `unicorn:defaults` task
-
     set :unicorn_logrotate_enabled, false # by default, don't use logrotate to rotate unicorn logs
-
     set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids')
+    set :plist, "#{fetch(:shared_path)}/config/unicorn.plist"
   end
 end
 
@@ -36,11 +35,9 @@ namespace :unicorn do
   desc 'Setup Unicorn initializer'
   task :setup_initializer do
     on roles :app do
-      sudo_upload! template('unicorn_init.erb'), unicorn_initd_file
-      execute :chmod, '+x', unicorn_initd_file
-      sudo 'unicorn_rails', '-c',  fetch(:unicorn_config), '-E', 'production', '-D'
-      # sudo launchctl load -w /Library/LaunchDaemons/com.autodesk.backburner_server.plist
-      # sudo 'update-rc.d', '-f', fetch(:unicorn_service), 'defaults'
+      execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
+      upload! template('unicorn.plist.erb'), fetch(:plist)
+      upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end
 
