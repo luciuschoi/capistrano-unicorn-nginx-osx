@@ -10,6 +10,7 @@ namespace :load do
     set :templates_path, 'config/deploy/templates'
     set :unicorn_pid, -> { unicorn_default_pid_file }
     set :unicorn_config, -> { unicorn_default_config_file }
+    set :unicorn_plist, -> { unicorn_default_config_plist }
     set :unicorn_logrotate_config, -> { unicorn_default_logrotate_config_file }
     set :unicorn_workers, 2
     set :unicorn_env, "" # environmental variables passed to unicorn/Ruby. Useful for GC tweaking, etc
@@ -36,7 +37,7 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      upload! template('unicorn.plist.erb'), fetch(:plist)
+      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
       upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end

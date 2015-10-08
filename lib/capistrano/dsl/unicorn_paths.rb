@@ -10,6 +10,10 @@ module Capistrano
         shared_path.join('config/unicorn.rb')
       end
 
+      def unicorn_default_config_plist
+        shared_path.join('config/unicorn.plist.erb')
+      end
+
       def unicorn_default_pid_file
         shared_path.join('tmp/pids/unicorn.pid')
       end
