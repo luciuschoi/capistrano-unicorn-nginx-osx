@@ -6,11 +6,11 @@ include Capistrano::DSL::UnicornPaths
 
 namespace :load do
   task :defaults do
-    set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
+    # set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
     set :templates_path, 'config/deploy/templates'
     set :unicorn_pid, -> { unicorn_default_pid_file }
     set :unicorn_config, -> { unicorn_default_config_file }
-    set :unicorn_plist, -> { unicorn_default_config_plist }
+    # set :unicorn_plist, -> { unicorn_default_config_plist }
     set :unicorn_logrotate_config, -> { unicorn_default_logrotate_config_file }
     set :unicorn_workers, 2
     set :unicorn_env, "" # environmental variables passed to unicorn/Ruby. Useful for GC tweaking, etc
@@ -42,6 +42,16 @@ namespace :unicorn do
     end
   end
 
+  after "deploy:setup", "unicorn:setup_initializer"
+
+  %w[start stop restart upgrade].each do |command|
+    desc "#{command} unicorn"
+    task command, roles: :app do
+      run "/Users/#{unicorn_user}/apps/unicorn_control.sh #{application} #{command}"
+    end
+    after "deploy:#{command}", "unicorn:#{command}"
+  end
+
   desc 'Setup Unicorn app configuration'
   task :setup_app_config do
     on roles :app do
@@ -56,15 +66,6 @@ namespace :unicorn do
       sudo :mkdir, '-pv', File.dirname(fetch(:unicorn_logrotate_config))
       sudo_upload! template('unicorn-logrotate.rb.erb'), fetch(:unicorn_logrotate_config)
       sudo 'chown', 'root:root', fetch(:unicorn_logrotate_config)
-    end
-  end
-
-  %w[start stop restart].each do |command|
-    desc "#{command} unicorn"
-    task command do
-      on roles :app do
-        sudo 'unicorn_control', fetch(:unicorn_service), command
-      end
     end
   end
 
