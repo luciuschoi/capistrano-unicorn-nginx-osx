@@ -6,11 +6,11 @@ include Capistrano::DSL::UnicornPaths
 
 namespace :load do
   task :defaults do
-    # set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
+    set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
     set :templates_path, 'config/deploy/templates'
     set :unicorn_pid, -> { unicorn_default_pid_file }
     set :unicorn_config, -> { unicorn_default_config_file }
-    # set :unicorn_plist, -> { unicorn_default_config_plist }
+    set :unicorn_plist, -> { unicorn_default_config_plist }
     set :unicorn_logrotate_config, -> { unicorn_default_logrotate_config_file }
     set :unicorn_workers, 2
     set :unicorn_env, "" # environmental variables passed to unicorn/Ruby. Useful for GC tweaking, etc
