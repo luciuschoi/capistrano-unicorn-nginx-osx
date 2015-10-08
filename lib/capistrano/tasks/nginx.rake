@@ -63,7 +63,7 @@ namespace :nginx do
   desc 'Reload nginx configuration'
   task :reload do
     on roles :web do
-      sudo nginx_service_path, 'reload'
+      sudo nginx_service_path, '-s', 'reload'
     end
   end
 
