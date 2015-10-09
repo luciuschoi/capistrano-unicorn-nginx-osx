@@ -15,7 +15,7 @@
   <array>
         <string>/usr/local/bin/unicorn</string>
         <string>-c</string>
-        <string>/Users/<%= fetch(:unicorn_user)%>/apps/<%= fetch(:application) %>/shared/config/unicorn.rb</string>
+        <string>/Users/<%= fetch(:deploy_user)%>/apps/<%= fetch(:application) %>/shared/config/unicorn.rb</string>
         <string>-E</string>
         <string>production</string>
   </array>
