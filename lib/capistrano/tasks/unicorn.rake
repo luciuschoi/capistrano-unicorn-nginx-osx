@@ -37,18 +37,21 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
-      upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
+      sudo_upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
+      execute :launchctl, 'load', fetch(:unicorn_plist)
     end
   end
 
-  %w[start stop restart upgrade].each do |command|
+  %w[restart].each do |command|
     desc "#{command} unicorn"
-    task command, roles: :app do
-      run "/Users/#{unicorn_user}/apps/unicorn_control.sh #{application} #{command}"
+    task command do
+      on roles :app do
+        execute "/Users/deployer/apps/unicorn_control.sh mediforum #{command}"
+      end
     end
     after "deploy:#{command}", "unicorn:#{command}"
   end
+
 
   desc 'Setup Unicorn app configuration'
   task :setup_app_config do
@@ -84,3 +87,6 @@ task :setup do
     invoke 'unicorn:setup_logrotate'
   end
 end
+
+
+# after "deploy:setup", "unicorn:setup_initializer"

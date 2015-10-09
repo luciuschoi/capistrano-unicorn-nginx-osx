@@ -11,7 +11,8 @@ module Capistrano
       end
 
       def unicorn_default_config_plist
-        shared_path.join("config/apps.#{fetch(:application)}_#{fetch(:staging)}.unicorn.plist")
+        "/Users/deployer/Library/LaunchAgents/apps.mediforum.unicorn.plist"
+        # shared_path.join("config/apps.#{fetch(:application)}.unicorn.plist")
       end
 
       def unicorn_default_pid_file
