@@ -6,11 +6,10 @@ include Capistrano::DSL::UnicornPaths
 
 namespace :load do
   task :defaults do
-    # set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
     set :templates_path, 'config/deploy/templates'
     set :unicorn_pid, -> { unicorn_default_pid_file }
     set :unicorn_config, -> { unicorn_default_config_file }
-    set :unicorn_plist, -> { unicorn_default_config_plist }
+    set :unicorn_plist, -> { unicorn_default_launchd_plist }
     set :unicorn_logrotate_config, -> { unicorn_default_logrotate_config_file }
     set :unicorn_workers, 2
     set :unicorn_env, "" # environmental variables passed to unicorn/Ruby. Useful for GC tweaking, etc
@@ -21,7 +20,6 @@ namespace :load do
     # set :unicorn_user # default set in `unicorn:defaults` task
     set :unicorn_logrotate_enabled, false # by default, don't use logrotate to rotate unicorn logs
     set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids')
-    # set :plist, "#{fetch(:shared_path)}/config/unicorn.plist"
   end
 end
 
@@ -44,7 +42,7 @@ namespace :unicorn do
   end
 
 
-  %w[restart].each do |command|
+  %w[start stop restart upgrade].each do |command|
     desc "#{command} unicorn"
     task command do
       on roles :app do
@@ -90,5 +88,5 @@ task :setup do
   end
 end
 
+  # after "deploy:setup", "unicorn:setup_initializer"
 
-# after "deploy:setup", "unicorn:setup_initializer"

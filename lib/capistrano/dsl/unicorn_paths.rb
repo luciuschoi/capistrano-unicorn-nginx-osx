@@ -2,17 +2,12 @@ module Capistrano
   module DSL
     module UnicornPaths
 
-      # def unicorn_initd_file
-      #   "/usr/local/etc/init.d/#{fetch(:unicorn_service)}"
-      # end
-
       def unicorn_default_config_file
         shared_path.join('config/unicorn.rb')
       end
 
-      def unicorn_default_config_plist
-        "/Users/deployer/Library/LaunchAgents/apps.mediforum.unicorn.plist"
-        # shared_path.join("config/apps.#{fetch(:application)}.unicorn.plist")
+      def unicorn_default_launchd_plist
+        "~/Library/LaunchAgents/apps.#{fetch(:application)}.unicorn.plist"
       end
 
       def unicorn_default_pid_file
@@ -32,7 +27,7 @@ module Capistrano
       end
 
       def unicorn_default_logrotate_config_file
-        "/usr/local/etc/logrotate.d/#{fetch(:unicorn_service)}"
+        "/usr/local/etc/logrotate.d/#{fetch(:application)}_production"
       end
     end
   end
