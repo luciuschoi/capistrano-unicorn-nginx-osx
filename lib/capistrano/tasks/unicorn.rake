@@ -41,15 +41,13 @@ namespace :unicorn do
     end
   end
 
-  %w[start stop restart upgrade].each do |command|
-    desc "#{command} unicorn"
-    task command do
-      on roles :app do
-        execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} #{command}"
-      end
+  desc "restart unicorn"
+  task :restart do
+    on roles :app do
+      execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} restart"
     end
-    after "deploy:#{command}", "unicorn:#{command}"
   end
+  after "deploy:restart", "unicorn:restart"
 
 
   desc 'Setup Unicorn app configuration'
