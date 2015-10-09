@@ -35,18 +35,17 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      upload! template('unicorn.plist'), fetch(:unicorn_plist)
-      # upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
+      # upload! template('unicorn.plist'), fetch(:unicorn_plist)
+      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
       upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end
-
 
   %w[start stop restart upgrade].each do |command|
     desc "#{command} unicorn"
     task command do
       on roles :app do
-        execute "/Users/deployer/apps/unicorn_control.sh mediforum #{command}"
+        execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} #{command}"
       end
     end
     after "deploy:#{command}", "unicorn:#{command}"
@@ -88,5 +87,5 @@ task :setup do
   end
 end
 
-  # after "deploy:setup", "unicorn:setup_initializer"
+
 
