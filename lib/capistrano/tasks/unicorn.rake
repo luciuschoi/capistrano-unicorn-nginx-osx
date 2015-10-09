@@ -6,7 +6,7 @@ include Capistrano::DSL::UnicornPaths
 
 namespace :load do
   task :defaults do
-    set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
+    # set :unicorn_service, -> { "unicorn_#{fetch(:application)}_#{fetch(:stage)}" }
     set :templates_path, 'config/deploy/templates'
     set :unicorn_pid, -> { unicorn_default_pid_file }
     set :unicorn_config, -> { unicorn_default_config_file }
@@ -21,7 +21,7 @@ namespace :load do
     # set :unicorn_user # default set in `unicorn:defaults` task
     set :unicorn_logrotate_enabled, false # by default, don't use logrotate to rotate unicorn logs
     set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids')
-    set :plist, "#{fetch(:shared_path)}/config/unicorn.plist"
+    # set :plist, "#{fetch(:shared_path)}/config/unicorn.plist"
   end
 end
 
@@ -37,7 +37,7 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      upload! template('unicorn.plist.erb'), "~/Library/LaunchAgents/apps.mediforum.unicorn.plist"
+      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
       upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end
