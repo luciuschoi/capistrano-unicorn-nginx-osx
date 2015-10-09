@@ -37,10 +37,11 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      sudo_upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
-      execute :launchctl, 'load', fetch(:unicorn_plist)
+      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
+      upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end
+
 
   %w[restart].each do |command|
     desc "#{command} unicorn"
