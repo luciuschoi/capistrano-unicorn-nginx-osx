@@ -37,7 +37,7 @@ namespace :unicorn do
   task :setup_initializer do
     on roles :app do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
-      upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
+      upload! template('unicorn.plist.erb'), "~/Library/LaunchAgents/apps.mediforum.unicorn.plist"
       upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
     end
   end
