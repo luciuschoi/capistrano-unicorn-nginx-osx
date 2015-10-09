@@ -2,9 +2,9 @@ module Capistrano
   module DSL
     module UnicornPaths
 
-      def unicorn_initd_file
-        "/usr/local/etc/init.d/#{fetch(:unicorn_service)}"
-      end
+      # def unicorn_initd_file
+      #   "/usr/local/etc/init.d/#{fetch(:unicorn_service)}"
+      # end
 
       def unicorn_default_config_file
         shared_path.join('config/unicorn.rb')
