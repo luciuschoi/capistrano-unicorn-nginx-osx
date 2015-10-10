@@ -8,8 +8,8 @@ module Capistrano
         SSHKit::Command.new(:bundle, :exec, :unicorn, args).to_command
       end
 
-      # renders the ERB template specified by template_name to string. Use the locals variable to pass locals to the
-      # ERB template
+      # renders the ERB template specified by template_name to string.
+      # Use the locals variable to pass locals to the ERB template
       def template_to_s(template_name, locals = {})
         config_file = "#{fetch(:templates_path)}/#{template_name}"
         # if no customized file, proceed with default
