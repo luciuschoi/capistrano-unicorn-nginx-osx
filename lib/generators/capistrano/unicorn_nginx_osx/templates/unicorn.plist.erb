@@ -5,7 +5,7 @@
   <key>EnvironmentVariables</key>
   <dict>
       <key>PATH</key>
-      <string>/usr/local/opt/ruby/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+      <string>/Users/deployer/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
   <key>Label</key>
   <string>apps.<%= fetch(:application)%>.unicorn</string>
@@ -13,7 +13,7 @@
   <true/>
   <key>ProgramArguments</key>
   <array>
-        <string>/Users/deployer/.rbenv/shims/unicorn</string>
+        <string>unicorn</string>
         <string>-c</string>
         <string>/Users/<%= fetch(:deploy_user)%>/apps/<%= fetch(:application) %>/shared/config/unicorn.rb</string>
         <string>-E</string>
