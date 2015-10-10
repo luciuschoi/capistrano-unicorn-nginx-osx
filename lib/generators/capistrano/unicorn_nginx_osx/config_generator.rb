@@ -11,7 +11,7 @@ module Capistrano
         def copy_template
           copy_file "nginx_conf.erb", "#{templates_path}/nginx_conf.erb"
           copy_file "unicorn.rb.erb", "#{templates_path}/unicorn.rb.erb"
-          copy_file "unicorn_init.erb", "#{templates_path}/unicorn_init.erb"
+          copy_file "unicorn.plist.erb", "#{templates_path}/unicorn.plist"
         end
       end
     end

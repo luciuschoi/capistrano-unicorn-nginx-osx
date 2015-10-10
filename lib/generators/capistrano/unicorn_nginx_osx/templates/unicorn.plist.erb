@@ -5,9 +5,9 @@
   <key>EnvironmentVariables</key>
   <dict>
       <key>PATH</key>
-      <string>/Users/deployer/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+      <string>/Users/<%= fetch(:deploy_user)%>/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
       <key>RBENV_ROOT</key>
-      <string>~/.rbenv</string>
+      <string>/Users/<%= fetch(:deploy_user)%>/.rbenv</string>
       <key>RBENV_VERSION</key>
       <string>2.2.3</string>
   </dict>
@@ -17,7 +17,7 @@
   <true/>
   <key>ProgramArguments</key>
   <array>
-        <string>unicorn</string>
+        <string>/Users/<%= fetch(:deploy_user)%>/.rbenv/shims/unicorn</string>
         <string>-c</string>
         <string>/Users/<%= fetch(:deploy_user)%>/apps/<%= fetch(:application) %>/shared/config/unicorn.rb</string>
         <string>-E</string>
