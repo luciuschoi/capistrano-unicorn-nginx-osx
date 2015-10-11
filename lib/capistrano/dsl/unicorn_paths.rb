@@ -2,6 +2,10 @@ module Capistrano
   module DSL
     module UnicornPaths
 
+      def unicorn_control_default_file
+        "/Users/#{fetch(deploy_user)}/apps/unicorn_control.sh"
+      end
+
       def unicorn_default_config_file
         shared_path.join('config/unicorn.rb')
       end

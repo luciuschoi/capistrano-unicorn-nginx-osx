@@ -37,7 +37,14 @@ namespace :unicorn do
       execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config))
       upload! template('unicorn.rb.erb'), fetch(:unicorn_config)
       sudo_upload! template('unicorn.plist.erb'), fetch(:unicorn_plist)
-      # sudo_upload! template('unicorn.plist'), fetch(:unicorn_plist)
+    end
+  end
+
+  desc "copy unicorn_control.sh to /Users/deploy_user/apps/"
+  task :unicorn_control do
+    on roles :app do
+      upload! template('unicorn_control.sh.erb'), fetch(:unicorn_control_default_file)
+      sudo :chmod, '+x', fetch(:unicorn_control_default_file)
     end
   end
 

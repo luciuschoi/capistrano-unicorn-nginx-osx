@@ -1,0 +1,96 @@
+#!/bin/sh
+
+# Modified version of githubs unicorn_init.sh script to control multiple unicorn processes.
+# PLIST added for launchctl (and LABEL if you want to use the lunchy gem)
+# usage: unicorn_control.sh <application> command
+
+set -e
+
+# Feel free to change any of the following variables for your app:
+TIMEOUT=${TIMEOUT-60}
+APP_ROOT="/Users/<%= fetch(:deploy_user) %>/apps/$1"
+PID=$APP_ROOT/shared/pids/unicorn.pid
+PLIST="/Users/<%= fetch(:deploy_user) %>/Library/LaunchAgents/apps.$1.unicorn.plist"
+LABEL="apps.$1.unicorn"
+AS_USER=<%= fetch(:deploy_user) %>
+
+set -u
+
+OLD_PIN="$PID.oldbin"
+
+sig () {
+  test -s "$PID" && kill -$1 `cat $PID`
+}
+
+oldsig () {
+  test -s $OLD_PIN && kill -$1 `cat $OLD_PIN`
+}
+
+run () {
+  if [ "$(id -un)" = "$AS_USER" ]; then
+   eval $1
+  else
+    su $AS_USER -c "$1"
+  fi
+
+}
+
+case "$2" in
+start)
+  sig 0 && echo >&2 "Already running" && exit 0
+  launchctl load $PLIST
+  ;;
+stop)
+  run "launchctl unload $PLIST" && exit 0
+  echo >&2 "Not running"
+  ;;
+force-stop)
+  run "launchctl unload $PLIST" && exit 0
+  echo >&2 "Not running"
+  ;;
+restart|reload)
+  sig HUP && echo reloaded OK && exit 0
+  echo >&2 "Couldn't reload, starting '$PLIST' instead"
+  run "launchctl load $PLIST"
+  ;;
+dump)
+  echo $APP_ROOT
+  echo $PID
+  echo `cat $PID`
+  echo $PLIST
+  echo $LABEL
+  echo $TIMEOUT
+  echo $AS_USER
+  echo $OLD_PIN
+  echo `cat $OLD_PIN`
+  echo "Control Command: $1 $2"
+  exit 0
+  ;;
+upgrade)
+  if sig USR2 && sleep 2 && sig 0 && oldsig QUIT
+  then
+    n=$TIMEOUT
+    while test -s $OLD_PIN && test $n -ge 0
+    do
+      printf '.' && sleep 1 && n=$(( $n - 1 ))
+    done
+    echo
+
+    if test $n -lt 0 && test -s $OLD_PIN
+    then
+      echo >&2 "$OLD_PIN still exists after $TIMEOUT seconds"
+      exit 1
+    fi
+    exit 0
+  fi
+  echo >&2 "Couldn't upgrade, starting '$PLIST' instead"
+  run "launchctl load $PLIST"
+  ;;
+reopen-logs)
+  sig USR1
+  ;;
+*)
+  echo >&2 "Usage: $0 <start|stop|restart|upgrade|force-stop|reopen-logs>"
+  exit 1
+  ;;
+esac
