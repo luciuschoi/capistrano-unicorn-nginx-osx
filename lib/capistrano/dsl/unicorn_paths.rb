@@ -3,7 +3,7 @@ module Capistrano
     module UnicornPaths
 
       def unicorn_control_default_file
-        "/Users/#{fetch(deploy_user)}/apps/unicorn_control.sh"
+        "/Users/#{deploy_user}/apps/unicorn_control.sh"
       end
 
       def unicorn_default_config_file

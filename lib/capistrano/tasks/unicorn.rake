@@ -40,8 +40,8 @@ namespace :unicorn do
     end
   end
 
-  desc "copy unicorn_control.sh to /Users/deploy_user/apps/"
-  task :unicorn_control do
+  desc "copy unicorn_control.sh to /Users/[deploy_user]/apps/"
+  task :copy_controller do
     on roles :app do
       upload! template('unicorn_control.sh.erb'), fetch(:unicorn_control_default_file)
       sudo :chmod, '+x', fetch(:unicorn_control_default_file)
