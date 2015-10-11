@@ -43,7 +43,7 @@ namespace :unicorn do
   desc "copy unicorn_control.sh to /Users/[deploy_user]/apps/"
   task :copy_controller do
     on roles :app do
-      upload! template('unicorn_control.sh.erb'), "/Users/deployer/apps/unicorn_control.sh"
+      sudo_upload! template('unicorn_control.sh.erb'), "/Users/deployer/apps/unicorn_control.sh"
       # sudo :chmod, '+x', fetch(:unicorn_control_default_file)
     end
   end
