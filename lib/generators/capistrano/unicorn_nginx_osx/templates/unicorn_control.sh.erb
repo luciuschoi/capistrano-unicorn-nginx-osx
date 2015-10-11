@@ -8,11 +8,11 @@ set -e
 
 # Feel free to change any of the following variables for your app:
 TIMEOUT=${TIMEOUT-60}
-APP_ROOT="/Users/<%= fetch(:deploy_user) %>/apps/$1"
+APP_ROOT="/Users/deployer/apps/$1"
 PID=$APP_ROOT/shared/pids/unicorn.pid
-PLIST="/Users/<%= fetch(:deploy_user) %>/Library/LaunchAgents/apps.$1.unicorn.plist"
+PLIST="/Users/deployer/Library/LaunchAgents/apps.$1.unicorn.plist"
 LABEL="apps.$1.unicorn"
-AS_USER=<%= fetch(:deploy_user) %>
+AS_USER=deployer
 
 set -u
 
