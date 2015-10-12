@@ -54,7 +54,7 @@ namespace :unicorn do
       # execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} restart"
       with RAILS_ENV: fetch(:environment) do
         within "#{fetch(:deploy_to)}/current/" do
-          execute :bundle, :exec, :'lunch', :restart, fetch(:application)
+          execute :bundle, :exec, :'lunchy', :restart, fetch(:application)
         end
       end
     end
