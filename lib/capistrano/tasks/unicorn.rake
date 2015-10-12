@@ -52,7 +52,11 @@ namespace :unicorn do
   task :restart do
     on roles :app do
       # execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} restart"
-      execute :lunchy, 'restart', fetch(:application)
+      with RAILS_ENV: fetch(:environment) do
+        within "#{fetch(:deploy_to)}/current/" do
+          execute :bundle, :exec, :'lunch', :restart, fetch(:application)
+        end
+      end
     end
   end
   after "deploy:restart", "unicorn:restart"
