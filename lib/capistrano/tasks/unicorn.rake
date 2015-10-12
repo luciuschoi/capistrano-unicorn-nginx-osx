@@ -40,18 +40,9 @@ namespace :unicorn do
     end
   end
 
-  desc "copy unicorn_control.sh to /Users/[deploy_user]/apps/"
-  task :copy_controller do
-    on roles :app do
-      sudo_upload! template('unicorn_control.sh.erb'), "/Users/deployer/apps/unicorn_control.sh"
-      sudo :chmod, '+x', "/Users/deployer/apps/unicorn_control.sh"
-    end
-  end
-
   desc "restart unicorn"
   task :restart do
     on roles :app do
-      # execute "/Users/#{fetch(:deploy_user)}/apps/unicorn_control.sh #{fetch(:application)} restart"
       with RAILS_ENV: fetch(:environment) do
         within "#{fetch(:deploy_to)}/current/" do
           execute :bundle, :exec, :'lunchy', :restart, fetch(:application)
@@ -60,7 +51,6 @@ namespace :unicorn do
     end
   end
   after "deploy:restart", "unicorn:restart"
-
 
   desc 'Setup Unicorn app configuration'
   task :setup_app_config do
