@@ -1,5 +1,7 @@
 # Capistrano::UnicornNginxOsx
 
+[![Gem Version](https://badge.fury.io/rb/capistrano-unicorn-nginx-osx.svg)](https://badge.fury.io/rb/capistrano-unicorn-nginx-osx)
+
 Capistrano tasks for automatic and sensible unicorn + nginx configuraion, especially, for Mac OSX server. This was customized to work on Mac OSX server, based upon [capistrano-plugins/capistrano-unicorn-nginx](https://github.com/capistrano-plugins/capistrano-unicorn-nginx) gem 
 
 Goals of this plugin:
