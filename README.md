@@ -1,6 +1,6 @@
-# Capistrano::UnicornNginx
+# Capistrano::UnicornNginxOsx
 
-Capistrano tasks for automatic and sensible unicorn + nginx configuraion.
+Capistrano tasks for automatic and sensible unicorn + nginx configuraion, especially, for Mac OSX server. This was customized to work on Mac OSX server, based upon [capistrano-plugins/capistrano-unicorn-nginx](https://github.com/capistrano-plugins/capistrano-unicorn-nginx) gem 
 
 Goals of this plugin:
 
@@ -18,15 +18,15 @@ application is started automatically after server restart
 see below for all available tasks
 * automatic load balancing setup when there are multiple `app` nodes
 
-`capistrano-unicorn-nginx` works only with Capistrano 3!
+`capistrano-unicorn-nginx-osx` works only with Capistrano 3!
 
 ### Installation
 
 Add this to `Gemfile`:
 
     group :development do
-      gem 'capistrano', '~> 3.2.1'
-      gem 'capistrano-unicorn-nginx', '~> 3.2.0'
+      gem 'capistrano', '~> 3.4.0'
+      gem 'capistrano-unicorn-nginx-osx', '~> 3.4.0.1'
     end
 
 And then:
