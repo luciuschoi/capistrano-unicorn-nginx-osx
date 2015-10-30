@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/capistrano-unicorn-nginx-osx.svg)](https://badge.fury.io/rb/capistrano-unicorn-nginx-osx)
 
-Capistrano tasks for automatic and sensible unicorn + nginx configuraion, especially, for Mac OSX server. This was customized to work on Mac OSX server, based upon [capistrano-plugins/capistrano-unicorn-nginx](https://github.com/capistrano-plugins/capistrano-unicorn-nginx) gem 
+Capistrano tasks for automatic and sensible unicorn + nginx configuraion, especially, for Mac OSX server. This was customized to work on Mac OSX server, based upon [capistrano-plugins/capistrano-unicorn-nginx](https://github.com/capistrano-plugins/capistrano-unicorn-nginx) gem
 
 Goals of this plugin:
 
@@ -28,7 +28,7 @@ Add this to `Gemfile`:
 
     group :development do
       gem 'capistrano', '~> 3.4.0'
-      gem 'capistrano-unicorn-nginx-osx', '~> 3.4.0.1'
+      gem 'capistrano-unicorn-nginx-osx', '~> 3.4.0.2'
     end
 
 And then:
