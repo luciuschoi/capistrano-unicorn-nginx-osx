@@ -86,6 +86,3 @@ task :setup do
     invoke 'unicorn:setup_logrotate'
   end
 end
-
-
-
