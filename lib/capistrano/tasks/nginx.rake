@@ -11,7 +11,7 @@ namespace :load do
     set :nginx_pid, nginx_default_pid_file
     # set :nginx_server_name # default set in the `nginx:defaults` task
     # ssl options
-    set :nginx_location, -> { "#{fetch(:nginx_service_path)}" }
+    set :nginx_location, '/usr/local/etc/nginx'
     set :nginx_use_ssl, false
     set :nginx_use_spdy, false
     # if true, passes the SSL client certificate to the application server for consumption in Ruby code
@@ -42,7 +42,7 @@ namespace :nginx do
   desc 'Setup nginx configuration'
   task :setup do
     on roles :web do
-      sudo_upload! template('nginx_conf.erb'), nginx_servers_file
+      sudo_upload! template('nginx_conf.erb'), nginx_config_file
     end
   end
 

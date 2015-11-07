@@ -2,7 +2,7 @@ module Capistrano
   module DSL
     module NginxPaths
 
-      def nginx_servers_file
+      def nginx_config_file
         "#{fetch(:nginx_location)}/servers/#{fetch(:nginx_config_name)}"
       end
 
