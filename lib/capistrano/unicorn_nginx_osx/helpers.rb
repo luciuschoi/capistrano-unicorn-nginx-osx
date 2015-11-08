@@ -35,10 +35,10 @@ module Capistrano
 
       def sudo_upload!(from, to)
         filename = File.basename(to)
-        to_dir = File.dirname(to)
+        # to_dir = File.dirname(to)
         tmp_file = "#{fetch(:tmp_dir)}/#{filename}"
         upload! from, tmp_file
-        sudo :mv, tmp_file, to_dir
+        sudo :mv, tmp_file, to
       end
 
       # Helper class to pass local variables to an ERB template
