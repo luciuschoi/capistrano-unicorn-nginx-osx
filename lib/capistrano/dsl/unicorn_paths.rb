@@ -27,7 +27,7 @@ module Capistrano
       end
 
       def unicorn_default_logrotate_config_file
-        "/usr/local/etc/logrotate.d/#{fetch(:application)}_production"
+        "/usr/local/etc/logrotate.d/#{fetch(:application)}_#{fetch(:stage}"
       end
     end
   end
