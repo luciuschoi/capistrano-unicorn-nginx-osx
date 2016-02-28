@@ -9,7 +9,7 @@
       <key>RBENV_ROOT</key>
       <string>/Users/<%= fetch(:deploy_user)%>/.rbenv</string>
       <key>RBENV_VERSION</key>
-      <string>2.2.3</string>
+      <string><%= fetch(:rbenv_ruby) %></string>
   </dict>
   <key>Label</key>
   <string>apps.<%= fetch(:application)%>.unicorn</string>
@@ -21,7 +21,7 @@
         <string>-c</string>
         <string>/Users/<%= fetch(:deploy_user)%>/apps/<%= fetch(:application) %>/shared/config/unicorn.rb</string>
         <string>-E</string>
-        <string>production</string>
+        <string><%= fetch(:stage) %></string>
   </array>
   <key>RunAtLoad</key>
   <true/>
